@@ -45,5 +45,6 @@ extern vfd_game *active_game;
 
 #include "astrowars.h"
 #include "caveman.h"
+#include "sonytaax44.h"
 
 #endif

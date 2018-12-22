@@ -33,7 +33,7 @@ vfd_game *active_game;
 
 // RECORD + PLAYBACK
 
-uint8_t inputs[0x10];
+uint8_t inputs[INPUTS_NUM];
 
 uint8_t input_data;
 uint8_t old_input_data;
@@ -143,9 +143,52 @@ void do_inputs(void) {
 							inputs[4]=bit;
 							break;
 
-						case SDLK_q:
-							running = 0;
-							break;			
+                        case SDLK_m: // MUTING
+                            inputs[5]=bit;
+                            break;
+
+                        case SDLK_q: // PHONO
+                            inputs[6]=bit;
+                            break;
+                        case SDLK_w: // TUNER
+                            inputs[7]=bit;
+                            break;
+                        case SDLK_e: // DAD/AUX
+                            inputs[8]=bit;
+                            break;
+                        case SDLK_r: // TAPE-1
+                            inputs[9]=bit;
+                            break;
+                        case SDLK_t: // TAPE-2
+                            inputs[10]=bit;
+                            break;
+                        case SDLK_y: // COPY1-2
+                            inputs[11]=bit;
+                            break;
+                        case SDLK_a: // BASS -
+                            inputs[12]=bit;
+                            break;
+                        case SDLK_z: // BASS +
+                            inputs[13]=bit;
+                            break;
+                        case SDLK_s: // TREBLE -
+                            inputs[14]=bit;
+                            break;
+                        case SDLK_x: // TREBLE +
+                            inputs[15]=bit;
+                            break;
+                        case SDLK_d: // LOW FILTER
+                            inputs[16]=bit;
+                            break;
+                        case SDLK_f: // HIGH FILTER
+                            inputs[17]=bit;
+                            break;
+                        case SDLK_p: // REMOTE
+                            inputs[18]=bit;
+                            break;
+//						case SDLK_q:
+//							running = 0;
+//							break;
 
 						default:
 							break;
@@ -182,7 +225,7 @@ void mainloop(void) {
 
 		input_data = 0;
 
-		for (x=0;x<5;x++) {
+		for (x=0;x<INPUTS_NUM;x++) {
 			input_data |= inputs[x]<<x;
 		}
 
@@ -193,7 +236,7 @@ void mainloop(void) {
 
 		if(pevent) {
 			if (cpu.totalticks >= pevent->cycle) {
-				for(x=0;x<5;x++) {
+				for(x=0;x<INPUTS_NUM;x++) {
 					inputs[x]=(pevent->val & (1<<x)) ? 1:0;
 				}
 				++pevent;
@@ -298,7 +341,8 @@ int main(int argc, char *argv[])
 
 	atexit(cleanup);
 
-	active_game = &game_astrowars;
+	active_game = &game_sonytaax44;
+//	active_game = &game_astrowars;
 //	active_game = &game_caveman;
 
 	if(argc>1) {

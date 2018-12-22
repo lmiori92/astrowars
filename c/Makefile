@@ -29,8 +29,8 @@ test:
 	@echo $(PATH)
 	@echo $(SHELL)
 
-$(EXE): vfd_emu.o caveman.o astrowars.o ucom4_cpu.o lib/SDL_rotozoom.o
-	$(CC) *.o lib/*.o $(LIBS) -o $(EXE)
+$(EXE): vfd_emu.o caveman.o astrowars.o sonytaax44.o ucom4_cpu.o lib/SDL_rotozoom.o
+	$(CC) -ggdb *.o lib/*.o $(LIBS) -o $(EXE)
 
 %.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
+	$(CC) -ggdb -c -o $@ $< $(CFLAGS)

@@ -22,7 +22,9 @@
 #define GLOBAL
 #endif
 
+#define INPUTS_NUM          20
+
 extern SDL_Surface *screen;
 void level_w(ucom4cpu *cpu, uint8_t data);
-extern uint8_t inputs[0x10];
+extern uint8_t inputs[INPUTS_NUM];
 #endif

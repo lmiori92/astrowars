@@ -23,6 +23,8 @@ int audiosize = 10240;
 uint8_t audiobuf[10240];
 int aindex = 0;
 
+void push_stack(ucom4cpu *cpu);
+
 void ucom4_reset(ucom4cpu *cpu) {
 	cpu->pc         = 0;
 	cpu->tc         = 0;
@@ -59,8 +61,15 @@ void ucom4_reset(ucom4cpu *cpu) {
 	cpu->audio_avail = 0;
 }
 
-void do_interrupt(void) {
-
+void do_interrupt(ucom4cpu *cpu) {
+    /* Added interrupt routine:
+     * - push onto stack
+     * - jump to interrupt vector */
+    cpu->icount--;
+    push_stack(cpu);
+    cpu->pc = 0xf << 2;
+    cpu->int_f = 0;
+    cpu->inte_f = (cpu->family == NEC_UCOM43) ? 0 : 1;
 }
 
 
@@ -955,7 +964,7 @@ int32_t ucom4_exec(ucom4cpu *cpu, int32_t ticks) {
 		// handle interrupt, but not during LI($9x) or EI($31) or while skipping
 		if (cpu->int_f && cpu->inte_f && (cpu->op & 0xf0) != 0x90 && cpu->op != 0x31 && !cpu->skip)
 		{
-			do_interrupt();
+			do_interrupt(cpu);
 			if (cpu->icount <= 0)
 				break;
 		}
